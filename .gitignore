@@ -1,2 +1,12 @@
+# Python cache
 __pycache__/
-*.db
+*.pyc
+
+# Database
+tasks.db
+
+# VS Code settings
+.vscode/
+
+# Environment variables
+.env

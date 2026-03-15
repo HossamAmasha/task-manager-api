@@ -153,6 +153,3 @@ def delete_task(
         session.commit()
         return {"message": "Task Deleted"}
 
-
-
-
