@@ -1,32 +1,55 @@
-# Task Manager API
+# Task Manager Full Stack App
 
-A RESTful Task Manager API built with **FastAPI**, **SQLModel**, and **SQLite**.
+A full-stack Task Manager application built with:
 
-This project demonstrates backend development concepts including authentication, database integration, API design, filtering, pagination, and secure user-specific data access.
+- FastAPI (Backend API)
+- SQLModel + SQLite (Database)
+- Vanilla HTML, CSS, JavaScript (Frontend)
+
+This project demonstrates backend development concepts such as authentication, database integration, API design, filtering, pagination, and secure user-based data access, along with a simple frontend that interacts with the API.
 
 ---
 
 # Features
 
+## Authentication
 - User registration
 - User login with JWT authentication
 - Password hashing using bcrypt
 - Protected routes using OAuth2 Bearer tokens
-- User-specific tasks (each user only sees their own tasks)
-- Full CRUD operations for tasks
+
+## Tasks (Backend API)
+- Create tasks
+- Retrieve tasks (user-specific)
+- Retrieve a single task
+- Update tasks (PUT)
+- Partially update tasks (PATCH)
+- Delete tasks
+
+## Advanced Backend Features
 - Search tasks by title
 - Filter tasks by completion status
-- Sort tasks by multiple fields
-- Pagination support (limit & offset)
-- Partial updates using PATCH
-- Task statistics endpoint
-- Automatic API documentation with Swagger
-- SQLite persistent database
+- Sort tasks (id, title, created_at, updated_at)
+- Pagination (limit & offset)
+- Task statistics (total, completed, pending)
+
+## Frontend
+- Register page
+- Login page
+- Dashboard page
+- Create tasks
+- Toggle task completion
+- Delete tasks
+- Logout
+
+NOTE:
+Some backend features (search, filter, sort, pagination) are currently implemented in the API but not yet exposed in the frontend UI.
 
 ---
 
 # Technologies Used
 
+## Backend
 - Python
 - FastAPI
 - SQLModel
@@ -35,77 +58,77 @@ This project demonstrates backend development concepts including authentication,
 - Passlib (bcrypt)
 - Uvicorn
 
+## Frontend
+- HTML
+- CSS
+- JavaScript (Fetch API)
+
 ---
 
 # Project Structure
 
-```
-task-manager-api
+task-manager-api/
 │
-├── auth.py        # Authentication routes (register, login, get current user)
-├── database.py    # Database configuration and engine
-├── main.py        # FastAPI app entry point
-├── models.py      # SQLModel database models and schemas
-├── routes.py      # Task API routes
-├── security.py    # Password hashing and JWT utilities
+├── auth.py
+├── database.py
+├── main.py
+├── models.py
+├── routes.py
+├── security.py
+│
+├── login.html
+├── register.html
+├── dashboard.html
+├── app.js
+├── style.css
+│
 ├── README.md
 └── .gitignore
-```
 
 ---
 
 # How to Run the Project
 
-### 1. Clone the repository
+## 1. Install dependencies
 
-```
-git clone https://github.com/HossamAmasha/task-manager-api.git
-cd task-manager-api
-```
-
-### 2. Install dependencies
-
-```
 pip install fastapi uvicorn sqlmodel python-jose passlib[bcrypt]
-```
 
-### 3. Run the server
+## 2. Run backend server
 
-```
 uvicorn main:app --reload
-```
 
-### 4. Open the API documentation
+Backend runs on:
+http://127.0.0.1:8000
 
-FastAPI automatically generates interactive documentation:
-
-```
+API docs:
 http://127.0.0.1:8000/docs
-```
+
+## 3. Run frontend
+
+Run:
+
+python -m http.server 5500
+
+Then open:
+
+http://127.0.0.1:5500/login.html
+
 
 ---
 
-# Authentication
+# Authentication Flow
 
-Protected endpoints require a **Bearer Token**.
+1. Register:
+POST /api/v1/auth/register
 
-Example request header:
-
-```
-Authorization: Bearer <your_token>
-```
-
-You obtain the token using:
-
-```
+2. Login:
 POST /api/v1/auth/login
-```
 
-You can also check the authenticated user with:
+Returns:
+access_token
 
-```
-GET /api/v1/auth/me
-```
+3. Use token:
+Authorization: Bearer <token>
 
 ---
 
@@ -113,58 +136,41 @@ GET /api/v1/auth/me
 
 ## Authentication
 
-| Method | Endpoint | Description |
-|------|------|------|
-| POST | /api/v1/auth/register | Register a new user |
-| POST | /api/v1/auth/login | Login and receive JWT token |
-| GET | /api/v1/auth/me | Get the currently authenticated user |
-
----
+POST   /api/v1/auth/register   → Register user  
+POST   /api/v1/auth/login      → Login and get token  
+GET    /api/v1/auth/me         → Get current user  
 
 ## Tasks
 
-| Method | Endpoint | Description |
-|------|------|------|
-| GET | /api/v1/tasks | Retrieve tasks |
-| GET | /api/v1/tasks/{id} | Retrieve a specific task |
-| POST | /api/v1/tasks | Create a new task |
-| PUT | /api/v1/tasks/{id} | Replace a task |
-| PATCH | /api/v1/tasks/{id} | Partially update a task |
-| DELETE | /api/v1/tasks/{id} | Delete a task |
-
----
+GET    /api/v1/tasks           → Get tasks  
+GET    /api/v1/tasks/{id}      → Get single task  
+POST   /api/v1/tasks           → Create task  
+PUT    /api/v1/tasks/{id}      → Replace task  
+PATCH  /api/v1/tasks/{id}      → Partial update  
+DELETE /api/v1/tasks/{id}      → Delete task  
 
 ## Task Statistics
 
-| Method | Endpoint | Description |
-|------|------|------|
-| GET | /api/v1/tasks/stats | Get statistics for the authenticated user's tasks |
+GET    /api/v1/tasks/stats     → Get stats  
 
 ---
 
-# Query Parameters
-
-The `GET /api/v1/tasks` endpoint supports several optional query parameters.
+# Query Parameters (Backend Only)
 
 Example:
 
-```
 /api/v1/tasks?completed=true&limit=10&offset=0&sort=created_at&search=home
-```
 
-| Parameter | Description |
-|------|------|
-| completed | Filter tasks by completion status |
-| limit | Number of tasks to return |
-| offset | Number of tasks to skip |
-| sort | Sort tasks by `id`, `title`, `created_at`, or `updated_at` |
-| search | Search tasks by title |
+- completed → filter by status
+- limit → number of results
+- offset → skip results
+- sort → id, title, created_at, updated_at
+- search → search by title
 
 ---
 
-# Example Task Object
+# Example Task
 
-```
 {
   "id": 1,
   "title": "Finish backend project",
@@ -173,39 +179,34 @@ Example:
   "updated_at": "2026-03-14T21:30:24",
   "owner_id": 2
 }
-```
 
 ---
 
 # Database
 
-The project uses **SQLite** as the database.
-
-The database file is automatically created when the application starts.
-
-```
+- SQLite database file:
 tasks.db
-```
 
-SQLModel automatically creates all tables during application startup.
+- Automatically created on startup
 
 ---
 
 # Security
 
-- Passwords are hashed using **bcrypt**
-- Authentication is handled using **JWT tokens**
-- Protected routes require **OAuth2 Bearer authentication**
+- Password hashing with bcrypt
+- JWT authentication
+- Protected routes using OAuth2
 - Users can only access their own tasks
 
 ---
 
 # Future Improvements
 
-- Frontend dashboard
-- Docker containerization
+- Connect frontend to search/filter/sort
+- Better UI/UX
+- Docker support
 - PostgreSQL database
-- Cloud deployment
+- Deployment (Render / AWS)
 - Task priorities and due dates
 
 ---

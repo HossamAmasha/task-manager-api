@@ -122,14 +122,14 @@ def patch_task(
     with Session(engine) as session:
         task = session.get(Task, task_id)
 
-        if task is none or task.owner_id != current_user.id:
+        if task is None or task.owner_id != current_user.id:
             raise HTTPException(status_code=404, detail="Task not found")
         
-        if update_task.title is not None:
-            task.title = update_task.title
+        if updated_task.title is not None:
+            task.title = updated_task.title
 
-        if update_task.completed is not None:
-            task.completed = update_task.completed
+        if updated_task.completed is not None:
+            task.completed = updated_task.completed
 
         task.updated_at = datetime.now(timezone.utc)
 
