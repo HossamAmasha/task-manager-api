@@ -2,66 +2,78 @@
 
 A full-stack Task Manager application built with:
 
-- FastAPI (Backend API)
-- SQLModel + SQLite (Database)
-- Vanilla HTML, CSS, JavaScript (Frontend)
+* FastAPI (Backend API)
+* SQLModel + SQLite (Database)
+* Vanilla HTML, CSS, JavaScript (Frontend)
+* Docker & Docker Compose (Containerization)
 
-This project demonstrates backend development concepts such as authentication, database integration, API design, filtering, pagination, and secure user-based data access, along with a simple frontend that interacts with the API.
+This project demonstrates backend development concepts such as authentication, database integration, API design, filtering, pagination, and secure user-based data access, along with a frontend that interacts with the API.
 
 ---
 
 # Features
 
 ## Authentication
-- User registration
-- User login with JWT authentication
-- Password hashing using bcrypt
-- Protected routes using OAuth2 Bearer tokens
+
+* User registration
+* User login with JWT authentication
+* Password hashing using bcrypt
+* Protected routes using OAuth2 Bearer tokens
 
 ## Tasks (Backend API)
-- Create tasks
-- Retrieve tasks (user-specific)
-- Retrieve a single task
-- Update tasks (PUT)
-- Partially update tasks (PATCH)
-- Delete tasks
+
+* Create tasks
+* Retrieve tasks (user-specific)
+* Retrieve a single task
+* Update tasks (PUT)
+* Partially update tasks (PATCH)
+* Delete tasks
 
 ## Advanced Backend Features
-- Search tasks by title
-- Filter tasks by completion status
-- Sort tasks (id, title, created_at, updated_at)
-- Pagination (limit & offset)
-- Task statistics (total, completed, pending)
+
+* Search tasks by title
+* Filter tasks by completion status
+* Sort tasks (id, title, created_at, updated_at)
+* Pagination (limit & offset)
+* Task statistics (total, completed, pending)
 
 ## Frontend
-- Register page
-- Login page
-- Dashboard page
-- Create tasks
-- Toggle task completion
-- Delete tasks
-- Logout
+
+* Register page
+* Login page
+* Dashboard page
+* Create tasks
+* Toggle task completion
+* Delete tasks
+* Logout
 
 NOTE:
-Some backend features (search, filter, sort, pagination) are currently implemented in the API but not yet exposed in the frontend UI.
+Some backend features (search, filter, sort, pagination) are implemented in the API but not fully exposed in the frontend UI.
 
 ---
 
 # Technologies Used
 
 ## Backend
-- Python
-- FastAPI
-- SQLModel
-- SQLite
-- JWT (python-jose)
-- Passlib (bcrypt)
-- Uvicorn
+
+* Python
+* FastAPI
+* SQLModel
+* SQLite
+* JWT (python-jose)
+* Passlib (bcrypt)
+* Uvicorn
 
 ## Frontend
-- HTML
-- CSS
-- JavaScript (Fetch API)
+
+* HTML
+* CSS
+* JavaScript (Fetch API)
+
+## DevOps
+
+* Docker
+* Docker Compose
 
 ---
 
@@ -82,6 +94,10 @@ task-manager-api/
 ├── app.js
 ├── style.css
 │
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+│
 ├── README.md
 └── .gitignore
 
@@ -89,46 +105,65 @@ task-manager-api/
 
 # How to Run the Project
 
-## 1. Install dependencies
+## Running the backend
 
-pip install fastapi uvicorn sqlmodel python-jose passlib[bcrypt]
+### Option 1: Run Locally (Without Docker)
 
-## 2. Run backend server
+#### 1. Install dependencies
+
+pip install fastapi uvicorn sqlmodel python-jose passlib[bcrypt] python-multipart
+
+#### 2. Run backend
 
 uvicorn main:app --reload
 
-Backend runs on:
+Backend:
 http://127.0.0.1:8000
 
-API docs:
+Docs:
 http://127.0.0.1:8000/docs
 
-## 3. Run frontend
 
-Run:
+### Option 2: Run with Docker
+
+#### Build and run
+
+docker build -t task-manager-api .
+docker run -p 8000:8000 task-manager-api
+
+---
+
+### Option 3: Run with Docker Compose (Recommended)
+
+docker compose up --build
+
+API:
+http://127.0.0.1:8000/docs
+
+---
+
+### 3. Run frontend
 
 python -m http.server 5500
 
-Then open:
-
+Open:
 http://127.0.0.1:5500/login.html
-
 
 ---
 
 # Authentication Flow
 
 1. Register:
-POST /api/v1/auth/register
+   POST /api/v1/auth/register
 
 2. Login:
-POST /api/v1/auth/login
+   POST /api/v1/auth/login
 
 Returns:
 access_token
 
 3. Use token:
-Authorization: Bearer <token>
+   Authorization: Bearer <token>
 
 ---
 
@@ -136,22 +171,22 @@ Authorization: Bearer <token>
 
 ## Authentication
 
-POST   /api/v1/auth/register   → Register user  
-POST   /api/v1/auth/login      → Login and get token  
-GET    /api/v1/auth/me         → Get current user  
+POST   /api/v1/auth/register
+POST   /api/v1/auth/login
+GET    /api/v1/auth/me
 
 ## Tasks
 
-GET    /api/v1/tasks           → Get tasks  
-GET    /api/v1/tasks/{id}      → Get single task  
-POST   /api/v1/tasks           → Create task  
-PUT    /api/v1/tasks/{id}      → Replace task  
-PATCH  /api/v1/tasks/{id}      → Partial update  
-DELETE /api/v1/tasks/{id}      → Delete task  
+GET    /api/v1/tasks
+GET    /api/v1/tasks/{id}
+POST   /api/v1/tasks
+PUT    /api/v1/tasks/{id}
+PATCH  /api/v1/tasks/{id}
+DELETE /api/v1/tasks/{id}
 
 ## Task Statistics
 
-GET    /api/v1/tasks/stats     → Get stats  
+GET    /api/v1/tasks/stats
 
 ---
 
@@ -161,53 +196,51 @@ Example:
 
 /api/v1/tasks?completed=true&limit=10&offset=0&sort=created_at&search=home
 
-- completed → filter by status
-- limit → number of results
-- offset → skip results
-- sort → id, title, created_at, updated_at
-- search → search by title
+* completed → filter by status
+* limit → number of results
+* offset → skip results
+* sort → id, title, created_at, updated_at
+* search → search by title
 
 ---
 
 # Example Task
 
 {
-  "id": 1,
-  "title": "Finish backend project",
-  "completed": false,
-  "created_at": "2026-03-14T21:30:24",
-  "updated_at": "2026-03-14T21:30:24",
-  "owner_id": 2
+"id": 1,
+"title": "Finish backend project",
+"completed": false,
+"created_at": "2026-03-14T21:30:24",
+"updated_at": "2026-03-14T21:30:24",
+"owner_id": 2
 }
 
 ---
 
 # Database
 
-- SQLite database file:
-tasks.db
-
-- Automatically created on startup
+* SQLite database (tasks.db)
+* Automatically created on startup
+* Each task is linked to a specific user (owner_id)
 
 ---
 
 # Security
 
-- Password hashing with bcrypt
-- JWT authentication
-- Protected routes using OAuth2
-- Users can only access their own tasks
+* Password hashing with bcrypt
+* JWT authentication
+* Protected routes using OAuth2
+* Users can only access their own tasks
 
 ---
 
 # Future Improvements
 
-- Connect frontend to search/filter/sort
-- Better UI/UX
-- Docker support
-- PostgreSQL database
-- Deployment (Render / AWS)
-- Task priorities and due dates
+* Connect frontend to search/filter/sort
+* Better UI/UX
+* PostgreSQL database
+* Deployment (Render / AWS)
+* Task priorities and due dates
 
 ---
 
